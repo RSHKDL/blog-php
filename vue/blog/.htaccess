@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule ^ajout-article/$ create_article.php [L]
