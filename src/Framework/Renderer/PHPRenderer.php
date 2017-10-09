@@ -1,7 +1,8 @@
 <?php
-namespace Framework;
 
-class Renderer
+namespace Framework\Renderer;
+
+class PHPRenderer implements Rendererinterface
 {
 
 
@@ -18,8 +19,17 @@ class Renderer
     private $globals = [];
 
 
+
+    public function __construct(?string $defaultPath = null)
+    {
+        if (!is_null($defaultPath)) {
+            $this->addPath($defaultPath);
+        }
+    }
+
+
     /**
-     * Create paths to load views
+     * Create a path to load views
      * @param string $namespace
      * @param null|string $path
      */
