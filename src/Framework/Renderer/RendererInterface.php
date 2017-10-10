@@ -2,7 +2,7 @@
 
 namespace Framework\Renderer;
 
-interface Rendererinterface
+interface RendererInterface
 {
 
 
