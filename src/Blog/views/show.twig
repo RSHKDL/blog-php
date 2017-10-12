@@ -3,8 +3,10 @@
 {% block title post.title %}
 
 {% block body %}
+
     <h1>{{ post.title }}</h1>
+    <p class="text-muted">{{ post.created_at | ago}}</p>
     <p><b>{{ post.header|nl2br }}</b></p>
-    {{ post.content|nl2br }}
+    {{ post.content | nl2br }}
 
 {% endblock %}
