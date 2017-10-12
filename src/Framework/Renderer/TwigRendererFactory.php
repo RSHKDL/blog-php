@@ -18,7 +18,6 @@ class TwigRendererFactory
                 $twig->addExtension($extension);
             }
         }
-
-        return new TwigRenderer($loader, $twig);
+        return new TwigRenderer($twig);
     }
 }
