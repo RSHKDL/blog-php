@@ -17,6 +17,7 @@ class Router
      */
     private $router;
 
+
     public function __construct()
     {
         $this->router = new FastRouteRouter();
@@ -26,11 +27,46 @@ class Router
     /**
      * @param string $path
      * @param string|callable $callable
-     * @param string $name
+     * @param string|null $name
      */
-    public function get(string $path, $callable, string $name)
+    public function get(string $path, $callable, ?string $name = null)
     {
         $this->router->addRoute(new ZendRoute($path, $callable, ['GET'], $name));
+    }
+
+
+    /**
+     * @param string $path
+     * @param string|callable $callable
+     * @param string|null $name
+     */
+    public function post(string $path, $callable, ?string $name = null)
+    {
+        $this->router->addRoute(new ZendRoute($path, $callable, ['POST'], $name));
+    }
+
+
+    public function delete(string $path, $callable, ?string $name = null)
+    {
+        $this->router->addRoute(new ZendRoute($path, $callable, ['DELETE'], $name));
+    }
+
+
+    /**
+     * Generate routes for the CRUD
+     *
+     * @param string $prefixPath
+     * @param $callable
+     * @param string $prefixName
+     */
+    public function crud(string $prefixPath, $callable, string $prefixName)
+    {
+        $this->get("$prefixPath", $callable, "$prefixName.index");
+        $this->get("$prefixPath/new", $callable, "$prefixName.create");
+        $this->post("$prefixPath/new", $callable);
+        $this->get("$prefixPath/{id:\d+}", $callable, "$prefixName.edit");
+        $this->post("$prefixPath/{id:\d+}", $callable);
+        $this->delete("$prefixPath/{id:\d+}", $callable, "$prefixName.delete");
     }
 
 
