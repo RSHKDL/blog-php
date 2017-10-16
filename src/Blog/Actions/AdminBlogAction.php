@@ -6,7 +6,7 @@ use App\Blog\Table\PostTable;
 use Framework\Actions\RouterAwareAction;
 use Framework\Renderer\RendererInterface;
 use Framework\Router;
-use GuzzleHttp\Psr7\Response;
+use Framework\Session\FlashService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -19,10 +19,12 @@ class AdminBlogAction
      */
     private $renderer;
 
+
     /**
      * @var Router
      */
     private $router;
+
 
     /**
      * @var PostTable
@@ -30,14 +32,25 @@ class AdminBlogAction
     private $postTable;
 
 
+    /**
+     * @var FlashService
+     */
+    private $flash;
+
+
     use RouterAwareAction;
 
 
-    public function __construct(RendererInterface $renderer, Router $router, PostTable $postTable)
-    {
+    public function __construct(
+        RendererInterface $renderer,
+        Router $router,
+        PostTable $postTable,
+        FlashService $flash
+    ) {
         $this->renderer = $renderer;
         $this->router = $router;
         $this->postTable = $postTable;
+        $this->flash = $flash;
     }
 
 
@@ -59,7 +72,7 @@ class AdminBlogAction
     {
         $params = $request->getQueryParams();
         $items = $this->postTable->findPaginated(12, $params['p'] ?? 1);
-        return $this->renderer->render('@blog/admin/index', compact('items'));
+        return $this->renderer->render('@blog/admin/index', compact('items', 'session'));
     }
 
 
@@ -79,6 +92,7 @@ class AdminBlogAction
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
             $this->postTable->update($item->id, $params);
+            $this->flash->success('L\'article a bien été modifié.');
             return $this->redirect('blog.admin.index');
         }
 
@@ -101,6 +115,7 @@ class AdminBlogAction
                 'created_at' => date('Y-m-d H:i:s')
             ]);
             $this->postTable->insert($params);
+            $this->flash->success('L\'article a bien été ajouté.');
             return $this->redirect('blog.admin.index');
         }
 

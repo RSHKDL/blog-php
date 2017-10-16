@@ -2,7 +2,11 @@
 
 use \Framework\Renderer\RendererInterface;
 use \Framework\Renderer\TwigRendererFactory;
+use Framework\Router;
 use Framework\Router\RouterTwigExtension;
+use Framework\Session\PHPSession;
+use Framework\Session\SessionInterface;
+use Framework\Twig\FlashExtension;
 use Framework\Twig\PagerFantaExtension;
 use Framework\Twig\TextExtension;
 use Framework\Twig\TimeExtension;
@@ -17,9 +21,11 @@ return [
         \DI\get(RouterTwigExtension::class),
         \DI\get(PagerFantaExtension::class),
         \DI\get(TextExtension::class),
-        \DI\get(TimeExtension::class)
+        \DI\get(TimeExtension::class),
+        \DI\get(FlashExtension::class)
     ],
-    \Framework\Router::class => \DI\object(),
+    SessionInterface::class => \DI\object(PHPSession::class),
+    Router::class => \DI\object(),
     RendererInterface::class => \DI\factory(TwigRendererFactory::class),
     \PDO::class => function(\Psr\Container\ContainerInterface $c) {
         return new PDO(
