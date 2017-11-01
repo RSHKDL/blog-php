@@ -2,6 +2,7 @@
 
 namespace App\Blog\Actions;
 
+use App\Blog\Entity\Post;
 use App\Blog\Table\PostTable;
 use Framework\Actions\RouterAwareAction;
 use Framework\Renderer\RendererInterface;
@@ -89,9 +90,6 @@ class AdminBlogAction
 
         if ($request->getMethod() === 'POST') {
             $params = $this->getParams($request);
-            $params = array_merge($params, [
-                'updated_at' => date('Y-m-d H:i:s')
-            ]);
             $validator = $this->getValidator($request);
             if ($validator->isValid()) {
                 $this->postTable->update($item->id, $params);
@@ -116,10 +114,6 @@ class AdminBlogAction
     {
         if ($request->getMethod() === 'POST') {
             $params = $this->getParams($request);
-            $params = array_merge($params, [
-                'updated_at' => date('Y-m-d H:i:s'),
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
             $validator = $this->getValidator($request);
             if ($validator->isValid()) {
                 $this->postTable->insert($params);
@@ -129,6 +123,8 @@ class AdminBlogAction
             $item = $params;
             $errors = $validator->getErrors();
         }
+        $item = new Post();
+        $item->created_at = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
 
         return $this->renderer->render('@blog/admin/create', compact('item', 'errors'));
     }
@@ -143,20 +139,24 @@ class AdminBlogAction
 
     private function getParams(Request $request)
     {
-        return array_filter($request->getParsedBody(), function ($key) {
-            return in_array($key, ['title', 'slug', 'header', 'content']);
+        $params = array_filter($request->getParsedBody(), function ($key) {
+            return in_array($key, ['title', 'slug', 'header', 'content', 'created_at']);
         }, ARRAY_FILTER_USE_KEY);
+        return array_merge($params, [
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
     }
 
 
     private function getValidator(Request $request)
     {
         return (new Validator($request->getParsedBody()))
-            ->required('title', 'slug', 'header', 'content')
+            ->required('title', 'slug', 'header', 'content', 'created_at')
             ->length('title', 2, 250)
             ->length('slug', 2, 120)
             ->length('header', 2)
             ->length('content', 40)
+            ->dateTime('created_at')
             ->slug('slug');
     }
 }

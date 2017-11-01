@@ -1,21 +1,5 @@
-{{ dump(errors) }}
-<div class="form-group">
-    <label for="title">Titre de l'article</label>
-    <input class="form-control" id="title" name="title" type="text" value="{{ item.title }}">
-</div>
-<div class="form-group">
-    <label for="slug">Slug l'article</label>
-    <input class="form-control" id="slug" name="slug" type="text" value="{{ item.slug }}">
-</div>
-<div class="form-group">
-    <label for="header">Chapo de l'article</label>
-    <textarea class="form-control" id="header" name="header" rows="4">
-        {{ item.header }}
-    </textarea>
-</div>
-<div class="form-group">
-    <label for="content">Contenu de l'article</label>
-    <textarea class="form-control" id="content" name="content" rows="20">
-        {{ item.content }}
-    </textarea>
-</div>
+{{ field('title', item.title, "Titre de l'article") }}
+{{ field('slug', item.slug, "Lien de l'article") }}
+{{ field('header', item.header, "Chapô de l'article", {type: 'textarea'}) }}
+{{ field('content', item.content, "Contenu de l'article", {type: 'textarea'}) }}
+{{ field('created_at', item.created_at, "Date de création", {class: 'datepicker'}) }}
