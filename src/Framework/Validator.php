@@ -1,6 +1,7 @@
 <?php
 namespace Framework;
 
+use Framework\Database\Table;
 use Framework\Validator\ValidationError;
 
 class Validator
@@ -61,6 +62,14 @@ class Validator
     }
 
 
+    /**
+     * Check the length of the field
+     *
+     * @param string $key
+     * @param int|null $min
+     * @param int|null $max
+     * @return Validator
+     */
     public function length(string $key, ?int $min, ?int $max = null): self
     {
         $value = $this->getValue($key);
@@ -104,13 +113,38 @@ class Validator
     }
 
 
+    /**
+     * @param string $key
+     * @param string $format
+     * @return Validator
+     */
     public function dateTime(string $key, string $format = 'Y-m-d H:i:s'): self
     {
         $value = $this->getValue($key);
         $date = \DateTime::createFromFormat($format, $value);
         $errors = \DateTime::getLastErrors();
-        if ($errors['error_count'] > 0 || $errors['warning_count'] > 0 || $date = false) {
+        if ($errors['error_count'] > 0 || $errors['warning_count'] > 0 || $date === false) {
             $this->addError($key, 'datetime', [$format]);
+        }
+        return $this;
+    }
+
+
+    /**
+     * Check if the key exist in a given table
+     *
+     * @param string $key
+     * @param string $table
+     * @param \PDO $pdo
+     * @return Validator
+     */
+    public function exists(string $key, string $table, \PDO $pdo): self
+    {
+        $value = $this->getValue($key);
+        $stmt = $pdo->prepare("SELECT id FROM $table WHERE id = ?");
+        $stmt->execute([$value]);
+        if ($stmt->fetchColumn() === false) {
+            $this->addError($key, 'exists', [$table]);
         }
         return $this;
     }
