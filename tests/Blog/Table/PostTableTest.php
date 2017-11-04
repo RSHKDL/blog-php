@@ -33,13 +33,6 @@ class PostTableTest extends DatabaseTestCase
     }
 
 
-    public function testFindNotFound()
-    {
-        $post = $this->postTable->find(999999);
-        $this->assertNull($post);
-    }
-
-
     public function testUpdate()
     {
         $this->seedDatabase($this->postTable->getPdo());

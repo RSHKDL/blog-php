@@ -11,7 +11,7 @@ class Table
     /**
      * @var \PDO
      */
-    private $pdo;
+    protected $pdo;
 
 
     /**
@@ -64,7 +64,7 @@ class Table
     /**
      * Retrieve a list keys values of our records
      *
-     *
+     * @return array
      */
     public function findList(): array
     {
@@ -80,19 +80,46 @@ class Table
 
 
     /**
+     * Retrieve all records
+     *
+     * @return array
+     */
+    public function findAll(): array
+    {
+        $query = $this->pdo->query("SELECT * FROM {$this->table}");
+        if ($this->entity) {
+            $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
+        } else {
+            $query->setFetchMode(\PDO::FETCH_OBJ);
+        }
+        return $query->fetchAll();
+    }
+
+
+    /**
+     * Retrieve a line in relation to a field
+     *
+     * @param string $field
+     * @param string $value
+     * @return array
+     * @throws NoRecordException
+     */
+    public function findBy(string $field, string $value)
+    {
+        return $this->fetchOrFail("SELECT * FROM {$this->table} WHERE $field = ?", [$value]);
+    }
+
+
+    /**
      * Retrieve an item by its id
      *
      * @param int $id
      * @return mixed
+     * @throws NoRecordException
      */
     public function find(int $id)
     {
-        $query = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE id = ?");
-        $query->execute([$id]);
-        if ($this->entity) {
-            $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
-        }
-        return $query->fetch() ?: null;
+        return $this->fetchOrFail("SELECT * FROM {$this->table} WHERE id = ?", [$id]);
     }
 
 
@@ -107,8 +134,8 @@ class Table
     {
         $fieldQuery = $this->buildFieldQuery($params);
         $params['id'] = $id;
-        $stmt = $this->pdo->prepare("UPDATE {$this->table} SET $fieldQuery WHERE id = :id");
-        return $stmt->execute($params);
+        $query = $this->pdo->prepare("UPDATE {$this->table} SET $fieldQuery WHERE id = :id");
+        return $query->execute($params);
     }
 
 
@@ -128,8 +155,8 @@ class Table
             return ':' . $field;
         }, $fields));
         $fields = join(', ', $fields);
-        $stmt = $this->pdo->prepare("INSERT INTO {$this->table} ($fields) VALUES ($values)");
-        return $stmt->execute($params);
+        $query = $this->pdo->prepare("INSERT INTO {$this->table} ($fields) VALUES ($values)");
+        return $query->execute($params);
     }
 
 
@@ -141,11 +168,15 @@ class Table
      */
     public function delete(int $id): bool
     {
-        $stmt = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = ?");
-        return $stmt->execute([$id]);
+        $query = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = ?");
+        return $query->execute([$id]);
     }
 
 
+    /**
+     * @param array $params
+     * @return string
+     */
     private function buildFieldQuery(array $params)
     {
         return join(', ', array_map(function ($field) {
@@ -162,9 +193,9 @@ class Table
      */
     public function exists($id): bool
     {
-        $stmt = $this->pdo->prepare("SELECT id FROM {$this->table} WHERE id = ?");
-        $stmt->execute([$id]);
-        return $stmt->fetchColumn() !== false;
+        $query = $this->pdo->prepare("SELECT id FROM {$this->table} WHERE id = ?");
+        $query->execute([$id]);
+        return $query->fetchColumn() !== false;
     }
 
 
@@ -192,5 +223,28 @@ class Table
     public function getPdo(): \PDO
     {
         return $this->pdo;
+    }
+
+
+    /**
+     * Allow the execution of a request then retrieve the 1st result
+     *
+     * @param string $query
+     * @param array $params
+     * @return mixed
+     * @throws NoRecordException
+     */
+    protected function fetchOrFail(string $query, array $params = [])
+    {
+        $query = $this->pdo->prepare($query);
+        $query->execute($params);
+        if ($this->entity) {
+            $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
+        }
+        $record = $query->fetch();
+        if ($record === false) {
+            throw new NoRecordException();
+        }
+        return $record;
     }
 }
