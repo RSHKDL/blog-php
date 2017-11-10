@@ -2,10 +2,8 @@
 namespace Framework;
 
 use DI\ContainerBuilder;
-use GuzzleHttp\Psr7\Response;
 use Interop\Http\Server\MiddlewareInterface;
 use Interop\Http\Server\RequestHandlerInterface;
-use Middlewares\Utils\RequestHandler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -14,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
  * Class App
  * @package Framework
  */
-class App
+class App implements RequestHandlerInterface
 {
 
     /**
@@ -84,9 +82,11 @@ class App
     {
         $middleware = $this->getMiddleware();
         if (is_null($middleware)) {
-            throw new \Exception('No middleware intercepted this request');
-        } else {
+            throw new \Exception("Aucun middleware n'a intercepté cette requête.");
+        } elseif (is_callable($middleware)) {
             return call_user_func_array($middleware, [$request, [$this, 'process']]);
+        } elseif ($middleware instanceof MiddlewareInterface) {
+            return $middleware->process($request, $this);
         }
     }
 
@@ -120,9 +120,9 @@ class App
 
 
     /**
-     * @return callable|null
+     * @return object
      */
-    public function getMiddleware(): ?callable
+    public function getMiddleware()
     {
         if (array_key_exists($this->index, $this->middlewares)) {
             $middleware = $this->container->get($this->middlewares[$this->index]);
@@ -130,5 +130,18 @@ class App
             return $middleware;
         }
         return null;
+    }
+
+
+    /**
+     * Handle the request and return a response.
+     *
+     * @param ServerRequestInterface $request
+     *
+     * @return ResponseInterface
+     */
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return $this->process($request);
     }
 }
