@@ -24,8 +24,7 @@
         "http-interop/http-middleware": "^0.5.0",
         "middlewares/whoops": "^0.5.0",
         "container-interop/container-interop": "^1.2",
-        "webimpress/composer-extra-dependency": "^0.2.2",
-        "webimpress/http-middleware-compatibility": "^0.1.4"
+        "doctrine/cache": "~1.4"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.1",
