@@ -14,10 +14,10 @@ use Framework\Twig\{
 
 return [
     'env' => \DI\env('ENV', 'production'),
-    'database.host' => 'localhost',
-    'database.username' => 'root',
-    'database.password' => '',
-    'database.name' => 'demo_blog_v2',
+    'database.host' => 'your_server',
+    'database.username' => 'your_username',
+    'database.password' => 'your_password',
+    'database.name' => 'your_database',
     'views.path' => dirname(__DIR__) . '/views',
     'twig.extensions' => [
         \DI\get(RouterTwigExtension::class),
@@ -42,5 +42,8 @@ return [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
             ]
         );
-    }
+    },
+    // MAILER
+    'mail.to' => 'your_email',
+    Swift_Mailer::class => \DI\factory(\Framework\SwiftMailerFactory::class)
 ];
