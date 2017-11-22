@@ -2,6 +2,7 @@
 
 use App\Admin\AdminModule;
 use App\Blog\BlogModule;
+use App\Contact\ContactModule;
 use Framework\Middleware\CsrfMiddleware;
 use Framework\Middleware\DispatcherMiddleware;
 use Framework\Middleware\MethodMiddleware;
@@ -16,11 +17,13 @@ require 'vendor/autoload.php';
 
 $modules = [
     AdminModule::class,
+    ContactModule::class,
     BlogModule::class
 ];
 
 $app = (new \Framework\App('config/config.php'))
     ->addModule(AdminModule::class)
+    ->addModule(ContactModule::class)
     ->addModule(BlogModule::class)
     ->pipe(Whoops::class)
     ->pipe(TrailingSlashMiddleware::class)

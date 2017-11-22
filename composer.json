@@ -24,7 +24,9 @@
         "http-interop/http-middleware": "^0.5.0",
         "middlewares/whoops": "^0.5.0",
         "container-interop/container-interop": "^1.2",
-        "doctrine/cache": "~1.4"
+        "doctrine/cache": "~1.4",
+        "swiftmailer/swiftmailer": "^6.0",
+        "digitalnature/php-ref": "^1.2"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.1",

@@ -14,10 +14,10 @@ use Framework\Twig\{
 
 return [
     'env' => \DI\env('ENV', 'production'),
-    'database.host' => 'your_server',
-    'database.username' => 'your_username',
-    'database.password' => 'your_password',
-    'database.name' => 'your_database',
+    'database.host' => 'localhost',
+    'database.username' => 'root',
+    'database.password' => '',
+    'database.name' => 'demo_blog_v2',
     'views.path' => dirname(__DIR__) . '/views',
     'twig.extensions' => [
         \DI\get(RouterTwigExtension::class),
@@ -44,6 +44,6 @@ return [
         );
     },
     // MAILER
-    'mail.to' => 'your_email',
+    'mail.to' => 'sand.wurster@gmail.com',
     Swift_Mailer::class => \DI\factory(\Framework\SwiftMailerFactory::class)
 ];
