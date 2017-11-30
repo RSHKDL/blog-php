@@ -26,7 +26,8 @@
         "container-interop/container-interop": "^1.2",
         "doctrine/cache": "~1.4",
         "swiftmailer/swiftmailer": "^6.0",
-        "digitalnature/php-ref": "^1.2"
+        "digitalnature/php-ref": "^1.2",
+        "intervention/image": "^2.4"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.1",

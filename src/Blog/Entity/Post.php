@@ -45,6 +45,7 @@ class Post
 
     public function getThumb()
     {
-        return '/uploads/posts/' . $this->image;
+        ['filename' => $filename, 'extension' => $extension] = pathinfo($this->image);
+        return '/uploads/posts/' . $filename . '_thumb.' . $extension;
     }
 }
