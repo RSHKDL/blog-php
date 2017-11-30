@@ -37,17 +37,22 @@ class FormExtension extends \Twig_Extension
             'name'  => $key,
             'id'    => $key
         ];
+
         if ($error) {
             $class .= ' has-danger';
             $attributes['class'] .= ' form-control-danger';
         }
+
         if ($type === 'textarea') {
             $input = $this->textarea($value, $attributes);
+        } elseif ($type === 'file') {
+            $input = $this->file($attributes);
         } elseif (isset($options['options'])) {
             $input = $this->select($value, $options['options'], $attributes);
         } else {
             $input = $this->input($value, $attributes);
         }
+
         return "<div class=\"" . $class . "\">
             <label for=\"title\">{$label}</label>
             {$input}
@@ -100,7 +105,19 @@ class FormExtension extends \Twig_Extension
 
 
     /**
+     * Generate an <input> of type "file"
      *
+     * @param array $attributes
+     * @return string
+     */
+    private function file(array $attributes)
+    {
+        return "<input " . $this->getHtmlFromArray($attributes) . " type=\"file\">";
+    }
+
+
+    /**
+     * Generate a <textarea>
      *
      * @param null|string $value
      * @param array $attributes

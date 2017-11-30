@@ -29,6 +29,9 @@ class Post
     public $category_name;
 
 
+    public $image;
+
+
     public function __construct()
     {
         if ($this->created_at) {
@@ -37,5 +40,11 @@ class Post
         if ($this->updated_at) {
             $this->updated_at = new \DateTime($this->updated_at);
         }
+    }
+
+
+    public function getThumb()
+    {
+        return '/uploads/posts/' . $this->image;
     }
 }

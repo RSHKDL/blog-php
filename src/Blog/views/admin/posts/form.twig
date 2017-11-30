@@ -10,6 +10,20 @@
         {{ field('category_id', item.category_id, "Catégorie de l'article", {options: categories}) }}
     </div>
 </div>
+<div class="row">
+    <div class="col-md-4">
+        {{ field('created_at', item.created_at, "Date de création", {class: 'datepicker'}) }}
+    </div>
+    <div class="col-md-4">
+        {% if item.image %}
+            <img src="{{ item.thumb }}" alt="" style="width: 100%"/>
+        {% else %}
+            <p class="text-muted">Cet article n'a pas d'image en une.</p>
+        {% endif %}
+    </div>
+    <div class="col-md-4">
+        {{ field('image', item.slug, "Image en une", {type: 'file'}) }}
+    </div>
+</div>
 {{ field('header', item.header, "Chapô de l'article", {type: 'textarea'}) }}
 {{ field('content', item.content, "Contenu de l'article", {type: 'textarea'}) }}
-{{ field('created_at', item.created_at, "Date de création", {class: 'datepicker'}) }}

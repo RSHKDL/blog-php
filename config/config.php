@@ -44,6 +44,6 @@ return [
         );
     },
     // MAILER
-    'mail.to' => 'sand.wurster@gmail.com',
+    'mail.to' => 'rshkdl86@gmail.com',
     Swift_Mailer::class => \DI\factory(\Framework\SwiftMailerFactory::class)
 ];

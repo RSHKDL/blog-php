@@ -24,7 +24,7 @@ class CategoryCrudAction extends CrudAction
     }
 
 
-    protected function getParams(ServerRequestInterface $request): array
+    protected function getParams(ServerRequestInterface $request, $item): array
     {
         return array_filter($request->getParsedBody(), function ($key) {
             return in_array($key, ['name', 'slug']);

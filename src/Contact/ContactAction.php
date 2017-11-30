@@ -40,8 +40,7 @@ class ContactAction
         RendererInterface $renderer,
         FlashService $flashService,
         \Swift_Mailer $mailer
-    )
-    {
+    ) {
         $this->renderer = $renderer;
         $this->to = $to;
         $this->flashService = $flashService;
