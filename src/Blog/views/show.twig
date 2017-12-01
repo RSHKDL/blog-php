@@ -3,15 +3,20 @@
 {% block title post.title %}
 
 {% block body %}
-
+<article>
     <h1>{{ post.title }}</h1>
+    {% if post.image %}
+    <div class="row">
+        <img src="{{ post.imageUrl }}" alt="{{ post.title }}" style="width: 100%">
+    </div>
+    {% endif %}    
     <p class="text-muted">
-        {% if post.category_id %}
-            <a href="{{ path('blog.category', {slug: post.category_slug}) }}" title="{{ post.category_name }}">{{ post.category_name }}</a>
+        {% if post.categoryId %}
+            <a href="{{ path('blog.category', {slug: post.categorySlug}) }}" title="{{ post.categoryName }}">{{ post.categoryName }}</a>
         {% endif %}
-        {{ post.created_at.format('d/m/Y \à H:i') }}
+        {{ post.createdAt.format('d/m/Y \à H:i') }}
     </p>
-    <p><b>{{ post.header|nl2br }}</b></p>
+    <section><b>{{ post.header|nl2br }}</b></section>
     {{ post.content | nl2br }}
-
+</article>
 {% endblock %}

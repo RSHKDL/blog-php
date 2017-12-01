@@ -2,20 +2,25 @@
 namespace Framework\Database;
 
 /**
- * Transforme un tableau en objet en utilisant les setters
+ * Transform an array into object by using the setters
  */
 class Hydrator
 {
 
     /**
-     * Transforme un tableau en objet en utilisant les setters
+     * Transform an array into object by using the setters
      * @param array $array
      * @param $object
      * @return mixed
      */
     public static function hydrate(array $array, $object)
     {
-        $instance = new $object();
+        if (is_string($object)) {
+            $instance = new $object();
+        } else {
+            $instance = $object;
+        }
+
         foreach ($array as $key => $value) {
             $method = self::getSetter($key);
             if (method_exists($instance, $method)) {

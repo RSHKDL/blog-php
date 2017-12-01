@@ -27,7 +27,7 @@ class PostSeeder extends AbstractSeed
         $this->table('categories')->insert($data)->save();
         // Seeding posts
         $data = [];
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 40; $i++) {
             $date = $faker->unixTime('now');
             $data[] = [
                 'title'         => $faker->catchPhrase,
@@ -36,7 +36,8 @@ class PostSeeder extends AbstractSeed
                 'header'        => $faker->text(200),
                 'content'       => $faker->text(3000),
                 'created_at'    => date('Y-m-d H:i:s', $date),
-                'updated_at'    => date('Y-m-d H:i:s', $date)
+                'updated_at'    => date('Y-m-d H:i:s', $date),
+                'published'     => 1
             ];
         }
         $this->table('posts')->insert($data)->save();

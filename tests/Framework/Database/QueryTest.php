@@ -7,8 +7,8 @@ use Tests\DatabaseTestCase;
 class QueryTest extends DatabaseTestCase {
 
     public function testSimpleQuery() {
-        $query = (new Query())->from('posts')->select('name');
-        $this->assertEquals('SELECT name FROM posts', (string)$query);
+        $query = (new Query())->from('posts')->select('title');
+        $this->assertEquals('SELECT title FROM posts', (string)$query);
     }
 
     public function testWithWhere() {
@@ -48,8 +48,18 @@ class QueryTest extends DatabaseTestCase {
         $posts = (new Query($pdo))
             ->from('posts', 'p')
             ->into(Demo::class)
-            ->all();
+            ->fetchAll();
         $this->assertEquals('demo', substr($posts[0]->getSlug(), -4));
+    }
+
+    public function testLimitOrder() {
+        $query = (new Query())
+            ->from('posts', 'p')
+            ->select('title')
+            ->order('id DESC')
+            ->order('title ASC')
+            ->limit(10,5);
+        $this->assertEquals('SELECT title FROM posts as p ORDER BY id DESC, title ASC LIMIT 5, 10', (string)$query);
     }
 
     public function testLazyHydrate() {
@@ -59,10 +69,18 @@ class QueryTest extends DatabaseTestCase {
         $posts = (new Query($pdo))
             ->from('posts', 'p')
             ->into(Demo::class)
-            ->all();
+            ->fetchAll();
         $post = $posts[0];
         $post2 = $posts[0];
         $this->assertSame($post, $post2);
     }
 
+    public function testJoinQuery() {
+        $query = (new Query())
+            ->from('posts', 'p')
+            ->select('title')
+            ->join('categories as c', 'c.id = p.category_id')
+            ->join('categories as c2', 'c2.id = p.category_id', 'inner');
+        $this->assertEquals('SELECT title FROM posts as p LEFT JOIN categories as c ON c.id = p.category_id INNER JOIN categories as c2 ON c2.id = p.category_id', (string)$query);
+    }
 }

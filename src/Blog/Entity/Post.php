@@ -1,44 +1,37 @@
 <?php
+
 namespace App\Blog\Entity;
 
 class Post
 {
 
-
     public $id;
-
 
     public $title;
 
-
     public $slug;
-
-
-    public $header;
-
 
     public $content;
 
+    public $createdAt;
 
-    public $created_at;
-
-
-    public $updated_at;
-
-
-    public $category_name;
-
+    public $updatedAt;
 
     public $image;
 
 
-    public function __construct()
+    public function setCreatedAt($datetime)
     {
-        if ($this->created_at) {
-            $this->created_at = new \DateTime($this->created_at);
+        if (is_string($datetime)) {
+            $this->createdAt = new \DateTime($datetime);
         }
-        if ($this->updated_at) {
-            $this->updated_at = new \DateTime($this->updated_at);
+    }
+
+
+    public function setUpdatedAt($datetime)
+    {
+        if (is_string($datetime)) {
+            $this->updatedAt = new \DateTime($datetime);
         }
     }
 
@@ -47,5 +40,11 @@ class Post
     {
         ['filename' => $filename, 'extension' => $extension] = pathinfo($this->image);
         return '/uploads/posts/' . $filename . '_thumb.' . $extension;
+    }
+
+
+    public function getImageUrl()
+    {
+        return '/uploads/posts/' . $this->image;
     }
 }

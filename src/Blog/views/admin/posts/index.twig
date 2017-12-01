@@ -21,7 +21,7 @@
         {% for item in items %}
             <tr>
                 <td>{{ item.title }}</td>
-                <td>{{ item.category_name }}</td>
+                <td>{{ item.categoryName }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ path(routePrefix ~ '.edit', {id: item.id}) }}">Éditer</a>
                     <form action="{{ path(routePrefix ~ '.delete', {id: item.id}) }}" method="post" onsubmit="return confirm('Êtes vous sûr ?')">

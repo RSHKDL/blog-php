@@ -11,7 +11,7 @@ class Upload
     protected $path;
 
 
-    protected $formats;
+    protected $formats = [];
 
 
     public function __construct(?string $path = null)
@@ -27,19 +27,22 @@ class Upload
      * Check if directory exist and create it otherwise
      *
      * @param UploadedFileInterface $file
-     * @return string
+     * @return null|string
      */
-    public function upload(UploadedFileInterface $file, ?string $oldFile = null): string
+    public function upload(UploadedFileInterface $file, ?string $oldFile = null): ?string
     {
-        $this->delete($oldFile);
-        $targetPath = $this->addCopySuffix($this->path . DIRECTORY_SEPARATOR . $file->getClientFilename());
-        $dirname = pathinfo($targetPath, PATHINFO_DIRNAME);
-        if (!file_exists($dirname)) {
-            mkdir($dirname, 777, true);
+        if ($file->getError() === UPLOAD_ERR_OK) {
+            $this->delete($oldFile);
+            $targetPath = $this->addCopySuffix($this->path . DIRECTORY_SEPARATOR . $file->getClientFilename());
+            $dirname = pathinfo($targetPath, PATHINFO_DIRNAME);
+            if (!file_exists($dirname)) {
+                mkdir($dirname, 777, true);
+            }
+            $file->moveTo($targetPath);
+            $this->generateFormat($targetPath);
+            return pathinfo($targetPath)['basename'];
         }
-        $file->moveTo($targetPath);
-        $this->generateFormat($targetPath);
-        return pathinfo($targetPath)['basename'];
+        return null;
     }
 
 

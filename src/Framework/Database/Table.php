@@ -9,13 +9,13 @@ class Table
 
 
     /**
-     * @var \PDO
+     * @var null|\PDO
      */
     protected $pdo;
 
 
     /**
-     * Name of table in DB
+     * Name of the table in DB
      * @var string
      */
     protected $table;
@@ -25,39 +25,12 @@ class Table
      * Entity to use
      * @var string|null
      */
-    protected $entity;
+    protected $entity = \stdClass::class;
 
 
     public function __construct(\PDO $pdo)
     {
         $this->pdo = $pdo;
-    }
-
-
-    /**
-     * Paginate items
-     *
-     * @param int $perPage
-     * @param int $currentPage
-     * @return Pagerfanta
-     */
-    public function findPaginated(int $perPage, int $currentPage): Pagerfanta
-    {
-        $query = new PaginatedQuery(
-            $this->pdo,
-            $this->paginationQuery(),
-            "SELECT COUNT(id) FROM {$this->table}",
-            $this->entity
-        );
-        return (new Pagerfanta($query))
-            ->setMaxPerPage($perPage)
-            ->setCurrentPage($currentPage);
-    }
-
-
-    protected function paginationQuery()
-    {
-        return "SELECT * FROM {$this->table}";
     }
 
 
@@ -80,19 +53,26 @@ class Table
 
 
     /**
-     * Retrieve all records
+     * Return an instance of Query
+     * Can generate aliases with the first letter of the table
      *
-     * @return array
+     * @return Query
      */
-    public function findAll(): array
+    public function makeQuery(): Query
     {
-        $query = $this->pdo->query("SELECT * FROM {$this->table}");
-        if ($this->entity) {
-            $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
-        } else {
-            $query->setFetchMode(\PDO::FETCH_OBJ);
-        }
-        return $query->fetchAll();
+        return (new Query($this->pdo))
+            ->from($this->table, $this->table[0])
+            ->into($this->entity);
+    }
+
+
+    /**
+     * Retrieve all records
+     * @return Query
+     */
+    public function findAll(): Query
+    {
+        return $this->makeQuery();
     }
 
 
@@ -106,7 +86,10 @@ class Table
      */
     public function findBy(string $field, string $value)
     {
-        return $this->fetchOrFail("SELECT * FROM {$this->table} WHERE $field = ?", [$value]);
+        return $this->makeQuery()
+            ->where("$field = :field")
+            ->params(["field" => $value])
+            ->fetchOrFail();
     }
 
 
@@ -119,7 +102,7 @@ class Table
      */
     public function find(int $id)
     {
-        return $this->fetchOrFail("SELECT * FROM {$this->table} WHERE id = ?", [$id]);
+        return $this->makeQuery()->where("id = $id")->fetchOrFail();
     }
 
 
@@ -130,7 +113,7 @@ class Table
      */
     public function count(): int
     {
-        return $this->fetchColumn("SELECT COUNT(id) FROM {$this->table}");
+        return $this->makeQuery()->count();
     }
 
 

@@ -2,7 +2,10 @@
 
 namespace Framework\Database;
 
-class Query
+use Pagerfanta\Pagerfanta;
+use Traversable;
+
+class Query implements \IteratorAggregate
 {
 
     private $select;
@@ -13,23 +16,25 @@ class Query
 
     private $entity;
 
-    private $group;
-
-    private $order;
+    private $order = [];
 
     private $limit;
 
+    private $joins;
+
     private $pdo;
 
-    private $params;
+    private $params = [];
 
     public function __construct(?\PDO $pdo = null)
     {
         $this->pdo = $pdo;
     }
 
+
     /**
-     * Definit le FROM
+     * Define the FROM
+     *
      * @param string $table
      * @param null|string $alias
      * @return Query
@@ -37,15 +42,17 @@ class Query
     public function from(string $table, ?string $alias = null): self
     {
         if ($alias) {
-            $this->from[$alias] = $table;
+            $this->from[$table] = $alias;
         } else {
             $this->from[] = $table;
         }
         return $this;
     }
 
+
     /**
-     * Spécifie les champs à récupérer
+     * Specify which fields to get
+     *
      * @param string[] ...$fields
      * @return Query
      */
@@ -55,8 +62,10 @@ class Query
         return $this;
     }
 
+
     /**
-     * Définit la condition de récupération
+     * Define the condition of the query
+     *
      * @param string[] ...$condition
      * @return Query
      */
@@ -66,29 +75,78 @@ class Query
         return $this;
     }
 
+
     /**
-     * Execute un COUNT() et renvoie la colonne
+     * Specify the limit
+     *
+     * @param int $length
+     * @param int $offset
+     * @return Query
+     */
+    public function limit(int $length, int $offset = 0): self
+    {
+        $this->limit = "$offset, $length";
+        return $this;
+    }
+
+
+    /**
+     * Specify the order by
+     *
+     * @param string $order
+     * @return Query
+     */
+    public function order(string $order): self
+    {
+        $this->order[] = $order;
+        return $this;
+    }
+
+
+    /**
+     * Add a join
+     *
+     * @param string $table
+     * @param string $condition
+     * @param string $type
+     * @return Query
+     */
+    public function join(string $table, string $condition, string $type = "left"): self
+    {
+        $this->joins[$type][] = [$table, $condition];
+        return $this;
+    }
+
+
+    /**
+     * Execute a COUNT() then return the column
+     *
      * @return int
      */
     public function count(): int
     {
-        $this->select("COUNT(id)");
-        return $this->execute()->fetchColumn();
+        $query = clone $this;
+        $table = current($this->from);
+        return $query->select("COUNT($table.id)")->execute()->fetchColumn();
     }
 
+
     /**
-     * Définit les paramètre pour la requête
+     * Define the parameters for the request
+     *
      * @param array $params
      * @return Query
      */
     public function params(array $params): self
     {
-        $this->params = $params;
+        $this->params = array_merge($this->params, $params);
         return $this;
     }
 
+
     /**
-     * Spécifie l'entité à utiliser
+     * Specify the entity to use
+     *
      * @param string $entity
      * @return Query
      */
@@ -98,11 +156,45 @@ class Query
         return $this;
     }
 
+
     /**
-     * Lance la requête
+     * Return a record
+     */
+    public function fetch()
+    {
+        $record = $this->execute()->fetch(\PDO::FETCH_ASSOC);
+        if ($record === false) {
+            return false;
+        }
+        if ($this->entity) {
+            return Hydrator::hydrate($record, $this->entity);
+        }
+        return $record;
+    }
+
+
+    /**
+     * Return a record or throw an exception
+     *
+     * @return bool|mixed
+     * @throws NoRecordException
+     */
+    public function fetchOrFail()
+    {
+        $record = $this->fetch();
+        if ($record === false) {
+            throw new NoRecordException();
+        }
+        return $record;
+    }
+
+
+    /**
+     * Start the request
+     *
      * @return QueryResult
      */
-    public function all(): QueryResult
+    public function fetchAll(): QueryResult
     {
         return new QueryResult(
             $this->execute()->fetchAll(\PDO::FETCH_ASSOC),
@@ -110,8 +202,24 @@ class Query
         );
     }
 
+
     /**
-     * Génère la requête SQL
+     * Paginate the results
+     *
+     * @param int $perPage
+     * @param int $currentPage
+     * @return Pagerfanta
+     */
+    public function paginate(int $perPage, int $currentPage = 1): Pagerfanta
+    {
+        $paginator = new PaginatedQuery($this);
+        return (new Pagerfanta($paginator))->setMaxPerPage($perPage)->setCurrentPage($currentPage);
+    }
+
+
+    /**
+     * Generate the request SQL
+     *
      * @return string
      */
     public function __toString()
@@ -124,15 +232,31 @@ class Query
         }
         $parts[] = 'FROM';
         $parts[] = $this->buildFrom();
+        if (!empty($this->joins)) {
+            foreach ($this->joins as $type => $joins) {
+                foreach ($joins as [$table, $condition]) {
+                    $parts[] = strtoupper($type) . " JOIN $table ON $condition";
+                }
+            }
+        }
         if (!empty($this->where)) {
             $parts[] = "WHERE";
             $parts[] = "(" . join(') AND (', $this->where) . ')';
         }
+        if (!empty($this->order)) {
+            $parts[] = 'ORDER BY';
+            $parts[] = join(', ', $this->order);
+        }
+        if ($this->limit) {
+            $parts[] = 'LIMIT ' . $this->limit;
+        }
         return join(' ', $parts);
     }
 
+
     /**
-     * Construit le FROM a as b ....
+     * Build the "FROM a as b ...."
+     *
      * @return string
      */
     private function buildFrom(): string
@@ -140,7 +264,7 @@ class Query
         $from = [];
         foreach ($this->from as $key => $value) {
             if (is_string($key)) {
-                $from[] = "$value as $key";
+                $from[] = "$key as $value";
             } else {
                 $from[] = $value;
             }
@@ -148,18 +272,33 @@ class Query
         return join(', ', $from);
     }
 
+
     /**
-     * Exécute la requête
+     * Execute the request
+     *
      * @return \PDOStatement
      */
     private function execute()
     {
         $query = $this->__toString();
-        if ($this->params) {
+        if (!empty($this->params)) {
             $statement = $this->pdo->prepare($query);
             $statement->execute($this->params);
             return $statement;
         }
         return $this->pdo->query($query);
+    }
+
+
+    /**
+     * Retrieve an external iterator
+     * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
+     * @return Traversable An instance of an object implementing <b>Iterator</b> or
+     * <b>Traversable</b>
+     * @since 5.0.0
+     */
+    public function getIterator()
+    {
+        return $this->fetchAll();
     }
 }
