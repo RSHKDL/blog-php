@@ -23,8 +23,8 @@ class FlashServiceTest extends TestCase
 
     public function setUp()
     {
-       $this->session = new ArraySession();
-       $this->flashService = new FlashService($this->session);
+        $this->session = new ArraySession();
+        $this->flashService = new FlashService($this->session);
     }
 
 

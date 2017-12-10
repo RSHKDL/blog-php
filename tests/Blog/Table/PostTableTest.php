@@ -5,7 +5,6 @@ use App\Blog\Entity\Post;
 use App\Blog\Table\PostTable;
 use Tests\DatabaseTestCase;
 
-
 class PostTableTest extends DatabaseTestCase
 {
 

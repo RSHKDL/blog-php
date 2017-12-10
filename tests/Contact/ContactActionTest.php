@@ -17,5 +17,4 @@ class ContactActionTest extends TestCase
     {
         $this->action = new ContactAction();
     }
-
 }

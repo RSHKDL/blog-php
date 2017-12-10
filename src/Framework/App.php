@@ -3,7 +3,6 @@ namespace Framework;
 
 use App\Framework\Middleware\RoutePrefixedMiddleware;
 use DI\ContainerBuilder;
-use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\Common\Cache\FilesystemCache;
 use Interop\Http\Server\MiddlewareInterface;
 use Interop\Http\Server\RequestHandlerInterface;
@@ -26,7 +25,7 @@ class App implements RequestHandlerInterface
 
 
     /**
-     * @var string
+     * @var string|array|null
      */
     private $definition;
 
@@ -40,7 +39,7 @@ class App implements RequestHandlerInterface
     /**
      * @var string[]
      */
-    private $middlewares;
+    private $middlewares = [];
 
 
     /**
@@ -49,7 +48,7 @@ class App implements RequestHandlerInterface
     private $index = 0;
 
 
-    public function __construct(string $definition)
+    public function __construct($definition = null)
     {
         $this->definition = $definition;
     }
@@ -71,11 +70,11 @@ class App implements RequestHandlerInterface
     /**
      * Add a middleware
      *
-     * @param string $routePrefix
-     * @param null|string $middleware
+     * @param string|callable|MiddlewareInterface $routePrefix
+     * @param null|string|callable|MiddlewareInterface $middleware
      * @return App
      */
-    public function pipe(string $routePrefix, ?string $middleware = null): self
+    public function pipe($routePrefix, $middleware = null): self
     {
         if ($middleware === null) {
             $this->middlewares[] = $routePrefix;
@@ -86,12 +85,15 @@ class App implements RequestHandlerInterface
                 $middleware
             );
         }
-
-
         return $this;
     }
 
 
+    /**
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws \Exception
+     */
     public function process(ServerRequestInterface $request): ResponseInterface
     {
         $middleware = $this->getMiddleware();
@@ -105,6 +107,13 @@ class App implements RequestHandlerInterface
     }
 
 
+    /**
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
     public function run(ServerRequestInterface $request): ResponseInterface
     {
         foreach ($this->modules as $module) {
@@ -114,7 +123,9 @@ class App implements RequestHandlerInterface
     }
 
 
-    /**
+    /**Build the container
+     *
+     *
      * @return ContainerInterface
      */
     public function getContainer(): ContainerInterface
@@ -126,7 +137,9 @@ class App implements RequestHandlerInterface
                 $builder->setDefinitionCache(new FilesystemCache('tmp/di'));
                 $builder->writeProxiesToFile(true, 'tmp/proxies');
             }
-            $builder->addDefinitions($this->definition);
+            if ($this->definition) {
+                $builder->addDefinitions($this->definition);
+            }
             foreach ($this->modules as $module) {
                 if ($module::DEFINITIONS) {
                     $builder->addDefinitions($module::DEFINITIONS);

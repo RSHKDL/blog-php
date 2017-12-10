@@ -59,6 +59,12 @@ class CrudAction
     ];
 
 
+    /**
+     * @var array
+     */
+    protected $acceptedParams = [];
+
+
     use RouterAwareAction;
 
 
@@ -183,7 +189,7 @@ class CrudAction
     protected function getParams(Request $request, $item): array
     {
         return array_filter($request->getParsedBody(), function ($key) {
-            return in_array($key, []);
+            return in_array($key, $this->acceptedParams);
         }, ARRAY_FILTER_USE_KEY);
     }
 
@@ -203,11 +209,11 @@ class CrudAction
     /**
      * Generate a new entity for the create action
      *
-     * @return array
+     * @return \stdClass
      */
     protected function getNewEntity()
     {
-        return [];
+        return new \stdClass();
     }
 
 

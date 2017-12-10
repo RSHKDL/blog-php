@@ -2,7 +2,6 @@
 
 namespace Tests\Framework;
 
-
 use Framework\Validator;
 use PHPUnit\Framework\TestCase;
 use Tests\DatabaseTestCase;

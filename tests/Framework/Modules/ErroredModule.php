@@ -1,7 +1,8 @@
 <?php
 namespace Tests\Framework\Modules;
 
-class ErroredModule {
+class ErroredModule
+{
 
 
     public function __construct(\Framework\Router $router)

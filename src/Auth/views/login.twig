@@ -2,12 +2,6 @@
 
 {% block body %}
 
-    {% if flash('error') %}
-        <div class="alert alert-danger">
-            {{ flash('error') }}
-        </div>
-    {% endif %}
-
     <form action="{{ path('auth.login') }}" method="post">
         {{ csrf_input() }}
         {{ field('username', null, 'Identifiant') }}

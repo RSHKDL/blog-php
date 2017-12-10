@@ -23,10 +23,13 @@ class ValidationError
     private $attributes;
 
 
+    /**
+     * @var array
+     */
     private $messages = [
         'required' => 'Le champs %s est requis',
         'empty' => 'Le champs %s ne peut être vide',
-        'slug' => '%s n\'est pas un slug valide',
+        'slug' => 'Ce n\'est pas un slug valide',
         'minLength' => 'Le champs %s doit contenir plus de %d caractères',
         'maxLength' => 'Le champs %s doit contenir moins de %d caractères',
         'betweenLength' => 'Le champs %s doit contenir entre %d et %d caractères',
@@ -50,7 +53,11 @@ class ValidationError
 
     public function __toString()
     {
-        $params = array_merge([$this->messages[$this->rule], $this->key], $this->attributes);
-        return (string)call_user_func_array('sprintf', $params);
+        if (!array_key_exists($this->rule, $this->messages)) {
+            return "Le champs {$this->key} ne correspond pas à la règle {$this->rule}";
+        } else {
+            $params = array_merge([$this->messages[$this->rule], $this->key], $this->attributes);
+            return (string)call_user_func_array('sprintf', $params);
+        }
     }
 }
