@@ -14,7 +14,7 @@
         {% if post.categoryId %}
             <a href="{{ path('blog.category', {slug: post.categorySlug}) }}" title="{{ post.categoryName }}">{{ post.categoryName }}</a>
         {% endif %}
-        {{ post.createdAt.format('d/m/Y \à H:i') }}
+        {{ post.createdAt.format('d/m/Y \à H:i') }} par {{ post.authorName }}
     </p>
     <section><b>{{ post.header|nl2br }}</b></section>
     {{ post.content | nl2br }}

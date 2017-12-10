@@ -1,6 +1,7 @@
 <?php
 namespace App\Blog\Table;
 
+use App\Auth\UserTable;
 use App\Blog\Entity\Post;
 use Framework\Database\Query;
 use Framework\Database\Table;
@@ -17,9 +18,11 @@ class PostTable extends Table
     public function findAll(): Query
     {
         $category = new CategoryTable($this->pdo);
+        $author = new UserTable($this->pdo);
         return $this->makeQuery()
             ->join($category->getTable() . ' as c', 'c.id = p.category_id')
-            ->select('p.*, c.name as category_name, c.slug as category_slug')
+            ->join($author->getTable() . ' as a', 'a.id = p.author_id')
+            ->select('p.*, c.name as category_name, c.slug as category_slug, a.username as author_name')
             ->order('p.created_at DESC');
     }
 

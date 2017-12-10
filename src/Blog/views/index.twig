@@ -40,9 +40,8 @@
                                         <br>
                                         {{ post.content | excerpt | nl2br }}
                                     </p>
-                                    <p class="text-muted">
-                                        {{ post.createdAt | ago }}
-                                    </p>
+                                    <p class="text-muted">{{ post.createdAt | ago }}</p>
+                                    <p class="text-muted">Par {{ post.authorName }}</p>
                                 </div>
                                 <div class="card-footer">
                                     <a class="btn btn-primary" href="{{ path('blog.show', {slug: post.slug, id: post.id}) }}">

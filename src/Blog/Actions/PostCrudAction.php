@@ -2,6 +2,7 @@
 
 namespace App\Blog\Actions;
 
+use App\Auth\UserTable;
 use App\Blog\Entity\Post;
 use App\Blog\PostUpload;
 use App\Blog\Table\CategoryTable;
@@ -18,15 +19,17 @@ class PostCrudAction extends CrudAction
 
     protected $viewPath = "@blog/admin/posts";
 
-
     protected $routePrefix = "blog.admin";
-
 
     /**
      * @var CategoryTable
      */
     private $categoryTable;
 
+    /**
+     * @var UserTable
+     */
+    private $userTable;
 
     /**
      * @var PostUpload
@@ -40,11 +43,13 @@ class PostCrudAction extends CrudAction
         PostTable $table,
         FlashService $flash,
         CategoryTable $categoryTable,
+        UserTable $userTable,
         PostUpload $postUpload
     ) {
         parent::__construct($renderer, $router, $table, $flash);
         $this->categoryTable = $categoryTable;
         $this->postUpload = $postUpload;
+        $this->userTable = $userTable;
     }
 
 
@@ -59,6 +64,7 @@ class PostCrudAction extends CrudAction
     protected function formParams(array $params): array
     {
         $params['categories'] = $this->categoryTable->findList();
+        $params['users'] = $this->userTable->findUserList();
         return $params;
     }
 
@@ -97,7 +103,8 @@ class PostCrudAction extends CrudAction
                 'created_at',
                 'category_id',
                 'image',
-                'published'
+                'published',
+                'author_id'
             ]);
         }, ARRAY_FILTER_USE_KEY);
         return array_merge($params, ['updated_at' => date('Y-m-d H:i:s')]);
@@ -113,6 +120,7 @@ class PostCrudAction extends CrudAction
             ->length('header', 2)
             ->length('content', 40)
             ->exists('category_id', $this->categoryTable->getTable(), $this->categoryTable->getPdo())
+            ->exists('author_id', $this->userTable->getTable(), $this->userTable->getPdo())
             ->extension('image', ['jpg', 'png'])
             ->dateTime('created_at')
             ->slug('slug');

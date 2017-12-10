@@ -26,7 +26,12 @@
     </div>
 </div>
 <diV class="row">
-    {{ field('published', item.published, "Article publié ?", {type: 'checkbox'}) }}
+    <div class="col-md-6">
+        {{ field('published', item.published, "Article publié ?", {type: 'checkbox'}) }}
+    </div>
+    <div class="col-md-6">
+        {{ field('author_id', item.authorId, "Auteur de l'article", {options: users}) }}
+    </div>
 </diV>
 {{ field('header', item.header, "Chapô de l'article", {type: 'textarea'}) }}
 {{ field('content', item.content, "Contenu de l'article", {type: 'textarea'}) }}

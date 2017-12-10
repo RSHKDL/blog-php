@@ -5,10 +5,10 @@ $migrations = [];
 $seeds = [];
 foreach ($app->getModules() as $module) {
     if ($module::MIGRATIONS) {
-        $migrations = $module::MIGRATIONS;
+        $migrations[] = $module::MIGRATIONS;
     }
     if ($module::SEEDS) {
-        $seeds = $module::SEEDS;
+        $seeds[] = $module::SEEDS;
     }
 }
 

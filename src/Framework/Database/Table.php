@@ -53,6 +53,25 @@ class Table
 
 
     /**
+     * Retrieve a list keys values of our records
+     * Need to normalize name / username
+     *
+     * @return array
+     */
+    public function findUserList(): array
+    {
+        $results = $this->pdo
+            ->query("SELECT id, username FROM {$this->table}")
+            ->fetchAll(\PDO::FETCH_NUM);
+        $list = [];
+        foreach ($results as $result) {
+            $list[$result[0]] = $result[1];
+        }
+        return $list;
+    }
+
+
+    /**
      * Return an instance of Query
      * Can generate aliases with the first letter of the table
      *
