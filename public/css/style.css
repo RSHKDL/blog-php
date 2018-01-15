@@ -1,0 +1,62 @@
+header {
+	background-color: #46B29D;
+	color: #324D5C;
+}
+
+.cv aside {
+	background-color: #324D5C;
+	font-size: .88rem;
+	text-align: center;
+}
+
+.cv aside h2 {
+	font-size: 1.5rem; 
+}
+
+.cv aside a {
+	color: #E37B40;
+}
+
+.cv aside a:hover,
+.cv aside a:focus {
+	color: white;
+}
+
+.cv aside .fas,
+.cv aside .svg-inline--fa {
+	color: #E37B40; 
+}
+
+.cv h1, .cv h2, .cv h3 {
+	font-family: 'Roboto Condensed', sans-serif;
+}
+
+.cv main h2 {
+	color: #324D5C; 
+	font-size: 1.6rem;
+	margin-bottom: 1rem;
+}
+
+.cv main h3,
+.skills li span {
+	color: #E37B40;
+}
+
+.cv main h3 {
+	font-size: 1.25rem;
+	font-variant: small-caps;
+}
+
+.cv img {
+	box-shadow: 3px 3px 7px #20313B;
+}
+
+@media (min-width: 768px) {
+	.cv aside {
+		text-align: left;
+	}
+}
+
+
+
+

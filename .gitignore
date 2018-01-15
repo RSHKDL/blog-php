@@ -3,3 +3,4 @@ vendor
 composer.lock
 /tmp
 /public/uploads
+/config/config.php

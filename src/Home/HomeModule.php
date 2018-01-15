@@ -1,16 +1,16 @@
 <?php
-namespace App\Resume;
+namespace App\Home;
 
 use Framework\Module;
 use Framework\Renderer\RendererInterface;
 use Framework\Router;
 
-class ResumeModule extends Module
+class HomeModule extends Module
 {
 
     public function __construct(Router $router, RendererInterface $renderer)
     {
-        $renderer->addPath('resume', __DIR__);
-        $router->get('/resume', ResumeAction::class, 'resume');
+        $renderer->addPath('home', __DIR__);
+        $router->get('/home', HomeAction::class, 'home');
     }
 }

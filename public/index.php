@@ -6,6 +6,7 @@ use App\Auth\ForbiddenMiddleware;
 use App\Blog\BlogModule;
 use App\Contact\ContactModule;
 use App\Resume\ResumeModule;
+use App\Home\HomeModule;
 use Framework\Auth\LoggedInMiddleware;
 use Framework\Middleware\CsrfMiddleware;
 use Framework\Middleware\DispatcherMiddleware;
@@ -24,6 +25,7 @@ $app = (new \Framework\App('config/config.php'))
     ->addModule(ContactModule::class)
     ->addModule(BlogModule::class)
     ->addModule(ResumeModule::class)
+    ->addModule(HomeModule::class)
     ->addModule(AuthModule::class);
 
 $container = $app->getContainer();

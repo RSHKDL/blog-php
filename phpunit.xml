@@ -1,6 +1,6 @@
 <phpunit bootstrap="./vendor/autoload.php" colors="true">
     <testsuites>
-        <testsuite name="MyFramework">
+        <testsuite name="blog-eresh">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

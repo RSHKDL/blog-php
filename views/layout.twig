@@ -3,15 +3,21 @@
     <head>
         <title>{% block title "Mon site" %}</title>
         <!-- Required meta tags -->
+        <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
         <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/style.css">
+        <!-- Font Awesome ^5.0 -->
+        <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+        <!-- Google fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed">
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="{{ path('blog.index') }}">Julien Helfer</a>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+            <a class="navbar-brand" href="{{ path('home') }}">Demo Blog</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -27,17 +33,17 @@
                         <a class="nav-link" href="{{ path('contact') }}">Me contacter</a>
                     </li>
                 </ul>
-                <div class="navbar-nav mr-auto">
+                <div class="nav justify-content-end">
                     {% if current_user() %}
-                        <div class="navbar-test">Connecté en tant que {{ current_user().username }}</div>
-                        <form class="nav-item active" method="post" action="{{ path('auth.logout') }}">
+                        <span class="navbar-text mr-2">Connecté en tant que {{ current_user().username }}</span>
+                        <form class="form-inline" method="post" action="{{ path('auth.logout') }}">
                             {{ csrf_input() }}
-                            <button class="nav-link">Se déconnecter</button>
+                            <button class="btn btn-outline-danger">Se déconnecter</button>
                         </form>
                     {% else %}
-                        <div class="nav-item active">
-                            <a class="nav-link" href="{{ path('auth.login') }}">Se connecter</a>
-                        </div>
+                        <span class="">
+                            <a class="btn btn-outline-success" href="{{ path('auth.login') }}">Se connecter</a>
+                        </span>
                     {% endif %}
                 </div>
             </div>
@@ -59,11 +65,36 @@
             {% block body %}{% endblock %}
 
         </div>
+
+        <footer class="p-4 mt-4 bg-dark text-secondary">
+            <ul class="list-inline text-center">
+                <li class="list-inline-item">
+                    <a href="https://fr.linkedin.com/" title="LinkedIn" class="text-secondary">
+                        <span class="fab fa-linkedin" aria-hidden="true"></span>
+                        LinkedIn
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="https://twitter.com/" title="Twitter" class="text-secondary">
+                        <span class="fab fa-twitter" aria-hidden="true"></span>
+                        Twitter
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="https://github.com/" title="Github" class="text-secondary">
+                        <span class="fab fa-github" aria-hidden="true"></span>
+                        Github
+                    </a>
+                </li>
+            </ul>
+            <p class="mb-0 text-center">Ereshkidal &copy; <time>2018</time></p>
+        </footer>
+
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/3.0.2/timeago.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/3.0.2/timeago.locales.min.js"></script>
         <script>

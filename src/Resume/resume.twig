@@ -1,0 +1,98 @@
+{% extends 'layout.twig' %}
+
+{% block title "Mon CV"%}
+
+{% block body %}
+
+    <header class="px-4 py-3">
+        <h1 class="display-4 mb-0">Ereshkidal, <small>développeur d'applications</small></h1>
+        <p class="text-light mb-0">Apprenti développeur, curieux et motivé ! Disponible immédiatement.</p>
+    </header>
+
+    <div class="container-fluid cv">
+        <div class="row">
+            <main class="col-lg-10 col-md-9 order-md-2 py-4 border">
+                <div class="row">
+                    <section class="col-md pl-md-5">
+                        <h2>Expérience professionelle</h2>
+
+                        <h3>Agence Truc</h3>
+                        <b>De <time datetime="2015-02-01T09:00">fév. 2015</time> à <time datetime="2016-12-01T17:00">déc. 2016</time></b>
+                        <p>Une expérience ici, avec la description du poste et des responsabilités liées, ainsi qu'un bref résumé des missions accomplies.</p>
+                        <ul>
+                            <li>Mission untel avec une description encourageante</li>
+                            <li>Mission untel avec une description audacieuse</li>
+                        </ul>
+
+                        <h3>ESN Machin</h3>
+                        <b><time>2014</time></b>
+                        <p>Une expérience là, avec la description du poste et des responsabilités liées, ainsi qu'un bref résumé des missions accomplies.</p>
+                        <ul>
+                            <li>Mission untel avec une description astucieuse</li>
+                            <li>Mission untel avec une description technique</li>
+                        </ul>
+
+                        <h3>Entreprise Bidule</h3>
+                        <b>De <time datetime="2012-03-01T09:00">mar. 2012</time> à <time datetime="2013-12-01T17:00">déc. 2013</time></b>
+                        <p>Une première expérience en développement.</p>
+                    </section>
+                    <section class="col-md">
+                        <h2>Compétences</h2>
+                        <ul class="list-unstyled skills">
+                            <li><span>★★★</span> HTML 5 & CSS 3</li>
+                            <li><span>★★★</span> PHP 5+ & 7+</li>
+                            <li><span>★★☆</span> Javascript & Node.js</li>
+                            <li><span>★★☆</span> SQL, Json & SPARQL</li>
+                            <li><span>★★☆</span> Symfony 3 & 4</li>
+                            <li><span>★☆☆</span> Ruby 2.5</li>
+                        </ul>
+                    </section>
+                    <section class="col-md">
+                        <h2>Formation</h2>
+
+                        <h3>Openclassroom</h3>
+                        <b><time>2018</time></b>
+                        <p>Formation de développeur d'application (PHP et Symfony)</p>
+
+                        <h3>École Bitoniau</h3>
+                        <b><time>2010</time></b>
+                        <p>Obtention du Diplôme Supérieur d'Art Apliqué (DSAA)</p>
+
+                        <h3>École Bibelot</h3>
+                        <b><time>2008</time></b>
+                        <p>Obtention du Diplôme National d'Art Plastique (DNAP)</p>
+                    </section>
+                </div>
+            </main>
+            <aside class="col-lg-2 col-md-3 order-md-1 py-4 text-light">
+                <figure>
+                    <a href="/uploads/cv/clint-eastwood.jpg">
+                        <img class="mw-100" src="/uploads/cv/clint-eastwood-thumb.jpg" alt="Photo demo" title="Cliquer sur la photo pour l'agrandir"/>
+                    </a>
+                </figure>
+
+                <h2>Coordonnées</h2>
+                <address>
+                    42, route de la Réponse<br>
+                    01337 Ville<br>
+                    <a href="mailto:rshkdl@mail.net" title="rshkdl@mail.net"><span class="fas fa-envelope fa-fw mr-2" aria-hidden="true"></span>Mon couriel</a><br>
+                    <span class="fas fa-mobile-alt fa-fw mr-2" aria-hidden="true"></span>06 15 16 23 42
+                </address>
+
+                <h2>Loisirs</h2>
+                <ul class="list-unstyled">
+                    <li><span class="fas fa-map fa-fw mr-2" aria-hidden="true"></span>Grande randonnée</li>
+                    <li><span class="fas fa-anchor fa-fw mr-2" aria-hidden="true"></span>Navigation à voile</li>
+                    <li><span class="fas fa-gamepad fa-fw mr-2" aria-hidden="true"></span>Jeux vidéo</li>
+                </ul>
+
+                <h2>Divers</h2>
+                <ul class="list-unstyled">
+                    <li><span class="fas fa-car fa-fw mr-2" aria-hidden="true"></span>Titulaire du permis B</li>
+                    <li><span class="fas fa-ambulance fa-fw mr-2" aria-hidden="true"></span>Premiers secours PSC1</li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+
+{% endblock %}

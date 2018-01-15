@@ -9,7 +9,13 @@ use Framework\Router\RouterTwigExtension;
 use Framework\Session\PHPSession;
 use Framework\Session\SessionInterface;
 use Framework\Twig\{
-    CsrfExtension, FlashExtension, FormExtension, PagerFantaExtension, TextExtension, TimeExtension
+    CsrfExtension,
+    FlashExtension,
+    FormExtension,
+    PagerFantaExtension,
+    TextExtension,
+    TimeExtension,
+    UrlExtension
 };
 
 return [
@@ -26,7 +32,8 @@ return [
         \DI\get(TimeExtension::class),
         \DI\get(FlashExtension::class),
         \DI\get(FormExtension::class),
-        \DI\get(CsrfExtension::class)
+        \DI\get(CsrfExtension::class),
+        \DI\get(UrlExtension::class)
     ],
     SessionInterface::class => \DI\object(PHPSession::class),
     CsrfMiddleware::class => \DI\object()->constructor(\DI\get(SessionInterface::class)),
