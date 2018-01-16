@@ -14,9 +14,17 @@
                 <ul>
                     <li>Nom d'utilisateur : {{ user.username }}</li>
                     <li>Couriel : {{ user.email }}</li>
-                    <li>Nom : {{ user.lastname }}</li>
-                    <li>Prénom : {{ user.firstname }}</li>
+                    {% if user.lastname %}
+                        <li>Nom : {{ user.lastname }}</li>
+                    {% endif %}
+                    {% if user.firstname %}
+                        <li>Nom : {{ user.firstname }}</li>
+                    {% endif %}
+                    <li>Rôle : {{ user.role }}</li>
                 </ul>
+                {% if user.role == 'admin' %}
+                    <a class="btn btn-primary" href="{{ path('admin') }}">Administration</a>
+                {% endif %}
             </section>
             <section class="col">
                 <h3>Modifier mes informations</h3>

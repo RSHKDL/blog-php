@@ -26,10 +26,6 @@ class HomeAction
      */
     public function __invoke(ServerRequestInterface $request)
     {
-        if ($request->getMethod() === 'GET') {
-            return $this->renderer->render('@home/home');
-        } else {
-            return $this->renderer->render('@home/home');
-        }
+        return $this->renderer->render('@home/home');
     }
 }

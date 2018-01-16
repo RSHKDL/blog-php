@@ -9,6 +9,7 @@ use App\Contact\ContactModule;
 use App\Resume\ResumeModule;
 use App\Home\HomeModule;
 use Framework\Auth\LoggedInMiddleware;
+use Framework\Auth\RoleMiddlewareFactory;
 use Framework\Middleware\CsrfMiddleware;
 use Framework\Middleware\DispatcherMiddleware;
 use Framework\Middleware\MethodMiddleware;
@@ -34,7 +35,10 @@ $container = $app->getContainer();
 $app->pipe(Whoops::class)
     ->pipe(TrailingSlashMiddleware::class)
     ->pipe(ForbiddenMiddleware::class)
-    ->pipe($container->get('admin.prefix'), LoggedInMiddleware::class)
+    ->pipe(
+        $container->get('admin.prefix'),
+        $container->get(RoleMiddlewareFactory::class)->makeForRole('admin')
+    )
     ->pipe(MethodMiddleware::class)
     ->pipe(CsrfMiddleware::class)
     ->pipe(RouterMiddleware::class)

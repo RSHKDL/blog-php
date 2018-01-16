@@ -49,11 +49,26 @@ class Router
     }
 
 
+    /**
+     * @param string $path
+     * @param string|callable $callable
+     * @param string $name
+     */
     public function delete(string $path, $callable, ?string $name = null)
     {
         $this->router->addRoute(new ZendRoute($path, $callable, ['DELETE'], $name));
     }
 
+
+    /**
+     * @param string $path
+     * @param $callable
+     * @param null|string $name
+     */
+    public function any(string $path, $callable, ?string $name = null)
+    {
+        $this->router->addRoute(new ZendRoute($path, $callable, ['DELETE', 'POST', 'GET', 'PUT'], $name));
+    }
 
     /**
      * Generate routes for the CRUD

@@ -16,7 +16,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
-            <a class="navbar-brand" href="{{ path('home') }}">Demo Blog</a>
+            <a class="navbar-brand" href="/">Demo Blog</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -34,7 +34,8 @@
                 </ul>
                 <div class="nav justify-content-end">
                     {% if current_user() %}
-                        <span class="navbar-text mr-2">Connecté en tant que {{ current_user().username }}</span>
+                        <span class="navbar-text mr-2">Connecté en tant que
+                            <a href="{{ path('account') }}">{{ current_user().username }}</a></span>
                         <form class="form-inline" method="post" action="{{ path('auth.logout') }}">
                             {{ csrf_input() }}
                             <button class="btn btn-outline-danger">Se déconnecter</button>
