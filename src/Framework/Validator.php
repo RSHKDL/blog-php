@@ -204,13 +204,17 @@ class Validator
      * Check if the key is unique in a given table
      *
      * @param string $key
-     * @param string $table
+     * @param string|Table $table
      * @param \PDO $pdo
      * @param int $exclude
      * @return Validator
      */
-    public function unique(string $key, string $table, \PDO $pdo, int $exclude = null): self
+    public function unique(string $key, $table, ?\PDO $pdo = null, ?int $exclude = null): self
     {
+        if ($table instanceof Table) {
+            $pdo = $table->getPdo();
+            $table = $table->getTable();
+        }
         $value = $this->getValue($key);
         $query = "SELECT id FROM $table WHERE $key = ?";
         $params = [$value];
@@ -238,6 +242,17 @@ class Validator
         $value = $this->getValue($key);
         if (filter_var($value, FILTER_VALIDATE_EMAIL) === false) {
             $this->addError($key, 'email');
+        }
+        return $this;
+    }
+
+
+    public function confirm(string $key): self
+    {
+        $value = $this->getValue($key);
+        $valueConfirm = $this->getValue($key . '_confirm');
+        if ($valueConfirm !== $value) {
+            $this->addError($key, 'confirm');
         }
         return $this;
     }

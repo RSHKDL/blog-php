@@ -35,6 +35,8 @@ class DatabaseAuth implements Auth
 
 
     /**
+     * Log in an user
+     *
      * @param string $username
      * @param string $password
      * @return UserInterface|null
@@ -49,7 +51,7 @@ class DatabaseAuth implements Auth
         /** @var User $user */
         $user = $this->userTable->findBy('username', $username);
         if ($user && password_verify($password, $user->password)) {
-            $this->session->set('auth.user', $user->id);
+            $this->setUser($user);
             return $user;
         }
         return null;
@@ -57,7 +59,7 @@ class DatabaseAuth implements Auth
 
 
     /**
-     *
+     *  Log out an user
      */
     public function logout(): void
     {
@@ -66,6 +68,8 @@ class DatabaseAuth implements Auth
 
 
     /**
+     * Get an user
+     *
      * @return UserInterface|null
      */
     public function getUser(): ?UserInterface
@@ -85,5 +89,17 @@ class DatabaseAuth implements Auth
             }
         }
         return null;
+    }
+
+
+    /**
+     * Define an user
+     *
+     * @param User $user
+     */
+    public function setUser(\App\Auth\User $user): void
+    {
+        $this->session->set('auth.user', $user->id);
+        $this->user = $user;
     }
 }

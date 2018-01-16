@@ -118,7 +118,7 @@ class PostCrudAction extends CrudAction
             ->length('title', 2, 250)
             ->length('slug', 2, 120)
             ->length('header', 2)
-            ->length('content', 40)
+            ->length('content', 2)
             ->exists('category_id', $this->categoryTable->getTable(), $this->categoryTable->getPdo())
             ->exists('author_id', $this->userTable->getTable(), $this->userTable->getPdo())
             ->extension('image', ['jpg', 'png'])

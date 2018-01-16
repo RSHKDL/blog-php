@@ -1,5 +1,6 @@
 <?php
 
+use App\Account\AccountModule;
 use App\Admin\AdminModule;
 use App\Auth\AuthModule;
 use App\Auth\ForbiddenMiddleware;
@@ -26,7 +27,8 @@ $app = (new \Framework\App('config/config.php'))
     ->addModule(BlogModule::class)
     ->addModule(ResumeModule::class)
     ->addModule(HomeModule::class)
-    ->addModule(AuthModule::class);
+    ->addModule(AuthModule::class)
+    ->addModule(AccountModule::class);
 
 $container = $app->getContainer();
 $app->pipe(Whoops::class)

@@ -1,0 +1,37 @@
+{% extends 'layout.twig' %}
+
+{% block title 'Mon compte' %}
+
+{% block body %}
+
+    <h2>Mon compte</h2>
+
+    <p>Bienvenue sur votre compte, {{ user.username }}</p>
+    <div class="container">
+        <div class="row">
+            <section class="col">
+                <h3>Mes informations</h3>
+                <ul>
+                    <li>Nom d'utilisateur : {{ user.username }}</li>
+                    <li>Couriel : {{ user.email }}</li>
+                    <li>Nom : {{ user.lastname }}</li>
+                    <li>Prénom : {{ user.firstname }}</li>
+                </ul>
+            </section>
+            <section class="col">
+                <h3>Modifier mes informations</h3>
+                <form action="" method="post">
+                    {{ csrf_input() }}
+                    {{ field('lastname', user.lastname, 'Nom') }}
+                    {{ field('firstname', user.firstname, 'Prénom') }}
+                    {{ field('email', user.email, 'Couriel', {type: 'email'}) }}
+                    {{ field('password', null, 'Mot de passe', {type: 'password'}) }}
+                    {{ field('password_confirm', null, 'Confirmer le mot de passe', {type: 'password'}) }}
+                    <button class="btn btn-primary">Modifier</button>
+                </form>
+            </section>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -47,13 +47,12 @@ class FormExtension extends \Twig_Extension
             $input = $this->textarea($value, $attributes);
         } elseif ($type === 'file') {
             $input = $this->file($attributes);
-        } elseif ($type === 'password') {
-            $input = $this->password($attributes);
         } elseif ($type === 'checkbox') {
             $input = $this->checkbox($value, $attributes);
         } elseif (array_key_exists('options', $options)) {
             $input = $this->select($value, $options['options'], $attributes);
         } else {
+            $attributes['type'] = $options['type'] ?? 'text';
             $input = $this->input($value, $attributes);
         }
 
@@ -104,7 +103,7 @@ class FormExtension extends \Twig_Extension
      */
     private function input(?string $value, array $attributes): string
     {
-        return "<input " . $this->getHtmlFromArray($attributes) . " type=\"text\" value=\"{$value}\">";
+        return "<input " . $this->getHtmlFromArray($attributes) . " value=\"{$value}\">";
     }
 
 
@@ -117,17 +116,6 @@ class FormExtension extends \Twig_Extension
     private function file(array $attributes)
     {
         return "<input " . $this->getHtmlFromArray($attributes) . " type=\"file\">";
-    }
-
-    /**
-     * Generate an <input type="password">
-     *
-     * @param array $attributes
-     * @return string
-     */
-    private function password(array $attributes)
-    {
-        return "<input " . $this->getHtmlFromArray($attributes) . " type=\"password\">";
     }
 
 

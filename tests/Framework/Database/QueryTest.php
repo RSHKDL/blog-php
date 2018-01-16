@@ -89,6 +89,8 @@ class QueryTest extends DatabaseTestCase
             ->select('title')
             ->join('categories as c', 'c.id = p.category_id')
             ->join('categories as c2', 'c2.id = p.category_id', 'inner');
-        $this->assertEquals('SELECT title FROM posts as p LEFT JOIN categories as c ON c.id = p.category_id INNER JOIN categories as c2 ON c2.id = p.category_id', (string)$query);
+        $this->assertEquals('SELECT title FROM posts as p 
+LEFT JOIN categories as c ON c.id = p.category_id 
+INNER JOIN categories as c2 ON c2.id = p.category_id', (string)$query);
     }
 }

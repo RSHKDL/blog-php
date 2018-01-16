@@ -4,6 +4,7 @@ namespace Framework;
 use App\Framework\Middleware\RoutePrefixedMiddleware;
 use DI\ContainerBuilder;
 use Doctrine\Common\Cache\FilesystemCache;
+use Framework\Middleware\CombinedMiddleware;
 use Interop\Http\Server\MiddlewareInterface;
 use Interop\Http\Server\RequestHandlerInterface;
 use Psr\Container\ContainerInterface;
@@ -94,16 +95,14 @@ class App implements RequestHandlerInterface
      * @return ResponseInterface
      * @throws \Exception
      */
-    public function process(ServerRequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $middleware = $this->getMiddleware();
-        if (is_null($middleware)) {
-            throw new \Exception("Aucun middleware n'a intercepté cette requête.");
-        } elseif (is_callable($middleware)) {
-            return call_user_func_array($middleware, [$request, [$this, 'process']]);
-        } elseif ($middleware instanceof MiddlewareInterface) {
-            return $middleware->process($request, $this);
+        $this->index++;
+        if ($this->index > 1) {
+            throw new \Exception();
         }
+        $middleware = new CombinedMiddleware($this->getContainer(), $this->middlewares);
+        return $middleware->process($request, $this);
     }
 
 
@@ -119,12 +118,12 @@ class App implements RequestHandlerInterface
         foreach ($this->modules as $module) {
             $this->getContainer()->get($module);
         }
-        return $this->process($request);
+        return $this->handle($request);
     }
 
 
-    /**Build the container
-     *
+    /**
+     * Build the container
      *
      * @return ContainerInterface
      */
@@ -149,38 +148,6 @@ class App implements RequestHandlerInterface
         }
         return $this->container;
     }
-
-
-    /**
-     * @return object
-     */
-    public function getMiddleware()
-    {
-        if (array_key_exists($this->index, $this->middlewares)) {
-            if (is_string($this->middlewares[$this->index])) {
-                $middleware = $this->container->get($this->middlewares[$this->index]);
-            } else {
-                $middleware = $this->middlewares[$this->index];
-            }
-            $this->index++;
-            return $middleware;
-        }
-        return null;
-    }
-
-
-    /**
-     * Handle the request and return a response.
-     *
-     * @param ServerRequestInterface $request
-     *
-     * @return ResponseInterface
-     */
-    public function handle(ServerRequestInterface $request): ResponseInterface
-    {
-        return $this->process($request);
-    }
-
 
     /**
      * @return array

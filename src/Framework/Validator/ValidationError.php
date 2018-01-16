@@ -38,7 +38,8 @@ class ValidationError
         'unique' => 'Le champs %s doit être unique',
         'email' => 'Ce courriel ne semble pas valide',
         'uploaded' => 'Une erreur est survenue lors de l\'ajout du fichier',
-        'fileType' => 'Le champs %s n\'est pas au format valide (%s)'
+        'fileType' => 'Le champs %s n\'est pas au format valide (%s)',
+        'confirm' => 'Vous devez confirmer le champs %s'
     ];
 
 

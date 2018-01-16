@@ -5,7 +5,8 @@ use App\Auth\ForbiddenMiddleware;
 use Framework\Auth;
 
 return [
-    'auth.login'         => '/login',
+    'auth.login'        => '/login',
+    'auth.entity'       => \App\Auth\User::class,
     'twig.extensions'   => \DI\add([
         \Di\get(\App\Auth\AuthTwigExtension::class)
     ]),
@@ -13,5 +14,6 @@ return [
         return $auth->getUser();
     })->parameter('auth', \DI\get(Auth::class)),
     Auth::class => \DI\get(DatabaseAuth::class),
+    \App\Auth\UserTable::class => \DI\object()->constructorParameter('entity', \DI\get('auth.entity')),
     ForbiddenMiddleware::class => \DI\object()->constructorParameter('loginPath', \DI\get('auth.login'))
 ];

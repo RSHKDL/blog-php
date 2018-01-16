@@ -1,14 +1,12 @@
 <?php
 namespace Framework\Twig;
 
-
 class UrlExtension extends \Twig_Extension
 {
 
 
     public function __construct()
     {
-
     }
 
 
