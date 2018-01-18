@@ -3,6 +3,7 @@
 namespace App\Blog\Actions;
 
 use App\Blog\Table\CategoryTable;
+use App\Blog\Table\CommentTable;
 use App\Blog\Table\PostTable;
 use Framework\Actions\RouterAwareAction;
 use Framework\Renderer\RendererInterface;
@@ -32,6 +33,11 @@ class PostShowAction
      */
     private $postTable;
 
+    /**
+     * @var CommentTable
+     */
+    private $commentTable;
+
 
     use RouterAwareAction;
 
@@ -39,11 +45,13 @@ class PostShowAction
     public function __construct(
         RendererInterface $renderer,
         Router $router,
-        PostTable $postTable
+        PostTable $postTable,
+        CommentTable $commentTable
     ) {
         $this->renderer = $renderer;
         $this->router = $router;
         $this->postTable = $postTable;
+        $this->commentTable = $commentTable;
     }
 
 
@@ -57,6 +65,10 @@ class PostShowAction
     {
         $slug = $request->getAttribute('slug');
         $post = $this->postTable->findWithCategory($request->getAttribute('id'));
+        $comments = $this->commentTable->findCommentsForPost($request->getAttribute('id'));
+        if ($comments->valid() == false) {
+            $comments = null;
+        }
         if ($post->slug !== $slug) {
             return $this->redirect('blog.show', [
                 'slug' => $post->slug,
@@ -64,7 +76,8 @@ class PostShowAction
             ]);
         }
         return $this->renderer->render('@blog/show', [
-            'post' => $post
+            'post' => $post,
+            'comments' => $comments
         ]);
     }
 }

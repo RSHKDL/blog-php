@@ -58,7 +58,7 @@ class LoginAttemptAction
         $params = $request->getParsedBody();
         $user = $this->auth->login($params['username'], $params['password']);
         if ($user) {
-            $path = $this->session->get('auth.redirect') ?: $this->router->generateUri('admin');
+            $path = $this->session->get('auth.redirect') ?: $this->router->generateUri('account');
             $this->session->delete('auth.redirect');
             return new RedirectResponse($path);
         } else {

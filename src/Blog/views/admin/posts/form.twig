@@ -1,29 +1,29 @@
 {{ csrf_input() }}
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         {{ field('title', item.title, "Titre de l'article") }}
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         {{ field('slug', item.slug, "Lien de l'article") }}
-    </div>
-    <div class="col-md-4">
-        {{ field('category_id', item.categoryId, "Catégorie de l'article", {options: categories}) }}
     </div>
 </div>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         {{ field('created_at', item.createdAt, "Date de création", {class: 'datepicker'}) }}
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
+        {{ field('category_id', item.categoryId, "Catégorie de l'article", {options: categories}) }}
+    </div>
+    {# <div class="col-md-4">
         {% if item.image %}
             <img src="{{ item.thumb }}" alt="" style="width: 100%"/>
         {% else %}
-            <p class="text-muted">Cet article n'a pas d'image en une.</p>
+            <p class="text-muted">Cet article n'a pas encore d'image en une.</p>
         {% endif %}
     </div>
     <div class="col-md-4">
-        {{ field('image', item.slug, "Image en une", {type: 'file'}) }}
-    </div>
+        {{ field('image', item.slug, "Image en une (requise)", {type: 'file'}) }}
+    </div> #}
 </div>
 <diV class="row">
     <div class="col-md-6">

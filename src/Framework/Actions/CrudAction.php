@@ -202,18 +202,20 @@ class CrudAction
      */
     protected function getValidator(Request $request)
     {
-        return new Validator(array_merge($request->getParsedBody(), $request->getUploadedFiles()));
+        /* return new Validator(array_merge($request->getParsedBody(), $request->getUploadedFiles())); */
+        return new Validator($request->getParsedBody());
     }
 
 
     /**
      * Generate a new entity for the create action
      *
-     * @return \stdClass
+     * @return mixed
      */
     protected function getNewEntity()
     {
-        return new \stdClass();
+        $entity = $this->table->getEntity();
+        return new $entity();
     }
 
 

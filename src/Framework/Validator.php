@@ -131,7 +131,7 @@ class Validator
     {
         /** @var UploadedFileInterface $file */
         $file = $this->getValue($key);
-        if ($file === null || $file->getError() !== UPLOAD_ERR_OK) {
+        if ($file !== null || $file->getError() !== UPLOAD_ERR_OK) {
             $this->addError($key, 'uploaded');
         }
         return $this;

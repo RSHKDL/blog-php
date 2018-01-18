@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.0.6/flatpickr.css" integrity="sha256-zx1uy0ZdGtqs9paICOAyOaJ+CfDfSMFS/BLZ8GrzIMo=" crossorigin="anonymous" />
     </head>
     <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="{{ path('admin') }}">Administration</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -28,12 +28,12 @@
                 </ul>
                 <form class="form-inline" method="post" action="{{ path('auth.logout') }}">
                     {{ csrf_input() }}
-                    <button class="btn btn-outline-dark">Se déconnecter</button>
+                    <button class="btn btn-outline-danger">Se déconnecter</button>
                 </form>
             </div>
         </div>
     </nav>
-    <div class="container">
+    <div class="container mt-3">
 
         {% if flash('success') %}
             <div class="alert alert-success">

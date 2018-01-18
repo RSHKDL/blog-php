@@ -5,11 +5,11 @@
 {% block body %}
 
     <p class="text-right">
-        <a class="btn btn-primary" href="{{ path(routePrefix ~ '.create') }}">Ajouter un article</a>
+        <a class="btn btn-success" href="{{ path(routePrefix ~ '.create') }}">Ajouter un article</a>
     </p>
 
     <table class="table table-striped">
-        <thead>
+        <thead class="bg-dark text-white">
             <tr>
                 <td>Titre</td>
                 <td>Catégorie</td>
@@ -24,7 +24,7 @@
                 <td>{{ item.categoryName }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ path(routePrefix ~ '.edit', {id: item.id}) }}">Éditer</a>
-                    <form action="{{ path(routePrefix ~ '.delete', {id: item.id}) }}" method="post" onsubmit="return confirm('Êtes vous sûr ?')">
+                    <form class="d-inline-block" action="{{ path(routePrefix ~ '.delete', {id: item.id}) }}" method="post" onsubmit="return confirm('Êtes vous sûr ?')">
                         <input type="hidden" name="_method" value="DELETE">
                         <button class="btn btn-danger">Supprimer</button>
                         {{ token_input | raw }}

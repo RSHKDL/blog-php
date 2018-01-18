@@ -3,20 +3,60 @@
 {% block title post.title %}
 
 {% block body %}
+{% if errors %}
+    {{ errors }}
+{% endif %}
+
 <article>
     <h1>{{ post.title }}</h1>
-    {% if post.image %}
+    {#{% if post.image %}
     <div class="row">
         <img src="{{ post.imageUrl }}" alt="{{ post.title }}" style="width: 100%">
     </div>
-    {% endif %}    
-    <p class="text-muted">
+    {% endif %}#}
+    <div class="article-meta bg-info p-2 text-light rounded mb-3">
         {% if post.categoryId %}
-            <a href="{{ path('blog.category', {slug: post.categorySlug}) }}" title="{{ post.categoryName }}">{{ post.categoryName }}</a>
+            Catégorie: <a class="text-light mr-2" href="{{ path('blog.category', {slug: post.categorySlug}) }}" title="{{ post.categoryName }}">{{ post.categoryName }}</a>
         {% endif %}
-        {{ post.createdAt.format('d/m/Y \à H:i') }} par {{ post.authorName }}
-    </p>
-    <section><b>{{ post.header|nl2br }}</b></section>
-    {{ post.content | nl2br }}
+        Posté le {{ post.createdAt.format('d/m/Y \à H:i') }} par {{ post.authorName }}
+    </div>
+    <p><b>{{ post.header|nl2br }}</b></p>
+    <p>{{ post.content | nl2br }}</p>
 </article>
+<div class="container">
+    <div class="row">
+        <section class="col-md">
+            <h3>10 derniers commentaires</h3>
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="mb-3">
+                        <p class="mb-0">{{ comment.content }}</p>
+                        <i class="text-muted">
+                            par {{ comment.authorName }}
+                            le {{ comment.createdAt.format('d/m/Y \à H:i') }}
+                            - <b>#{{ comment.id }}</b>
+                        </i>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Cet article n'a pas de commentaires</p>
+            {% endif %}
+        </section>
+        <section class="col-md">
+            <h3>Poster un commentaire</h3>
+            {% if current_user() %}
+                <form action="" method="post">
+                    {{ csrf_input() }}
+                    {{ field('content', item.content, "Votre commentaire", {type: 'textarea'}) }}
+                    <button class="btn btn-primary">Envoyer</button>
+                </form>
+            {% else %}
+                <p>Vous devez
+                    <a href="{{ path('auth.login') }}">vous identifier</a>
+                    pour poster un commentaire
+                </p>
+            {% endif %}
+        </section>
+    </div>
+</div>
 {% endblock %}

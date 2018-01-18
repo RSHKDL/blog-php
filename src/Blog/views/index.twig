@@ -15,7 +15,7 @@
             <h1>Catégorie : {{ category.name }}{% if page > 1 %}, page {{ page }}{% endif %}</h1>
         {% else %}
             <h1>Mes articles{% if page > 1 %}, page {{ page }}{% endif %}</h1>
-        {%  endif %}
+        {% endif %}
     </div>
 
     <div class="row">
@@ -28,9 +28,11 @@
                                 {% if(post.categoryName) %}
                                     <div class="card-header">{{ post.categoryName }}</div>
                                 {% endif %}
+                                {#
                                 {% if(post.image) %}
                                     <img class="card-img-top" src="{{ post.thumb }}" alt="{{ post.title }}" style="width: 100%">
                                 {% endif %}
+                                #}
                                 <div class="card-body">
                                     <h4 class="card-title">
                                         <a class="" href="{{ path('blog.show', {slug: post.slug, id: post.id}) }}">

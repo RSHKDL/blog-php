@@ -86,14 +86,15 @@ class PostCrudAction extends CrudAction
      */
     protected function getParams(ServerRequestInterface $request, $post): array
     {
-        $params = array_merge($request->getParsedBody(), $request->getUploadedFiles());
+        $params = $request->getParsedBody();
+        /* $params = array_merge($request->getParsedBody(), $request->getUploadedFiles());
         // Upload the file
         $image = $this->postUpload->upload($params['image'], $post->image);
         if ($image) {
             $params['image'] = $image;
         } else {
             unset($params['image']);
-        }
+        } */
         $params = array_filter($params, function ($key) {
             return in_array($key, [
                 'title',
@@ -102,7 +103,7 @@ class PostCrudAction extends CrudAction
                 'content',
                 'created_at',
                 'category_id',
-                'image',
+                /* 'image', */
                 'published',
                 'author_id'
             ]);
@@ -121,12 +122,12 @@ class PostCrudAction extends CrudAction
             ->length('content', 2)
             ->exists('category_id', $this->categoryTable->getTable(), $this->categoryTable->getPdo())
             ->exists('author_id', $this->userTable->getTable(), $this->userTable->getPdo())
-            ->extension('image', ['jpg', 'png'])
+            /* ->extension('image', ['jpg', 'png']) */
             ->dateTime('created_at')
             ->slug('slug');
-        if (is_null($request->getAttribute('id'))) {
+        /* if (is_null($request->getAttribute('id'))) {
             $validator->uploaded('image');
-        }
+        } */
         return $validator;
     }
 }

@@ -153,16 +153,13 @@ class Table
 
 
     /**
-     * Create a record post
+     * Create a record
      *
      * @param array $params
      * @return bool
      */
     public function insert(array $params): bool
     {
-        // This doesn't work with sqlite
-        // $fieldQuery = $this->buildFieldQuery($params);
-        // $stmt = $this->pdo->prepare("INSERT INTO posts SET $fieldQuery");
         $fields = array_keys($params);
         $values = join(', ', array_map(function ($field) {
             return ':' . $field;
