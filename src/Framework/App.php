@@ -26,9 +26,9 @@ class App implements RequestHandlerInterface
 
 
     /**
-     * @var string|array|null
+     * @var array
      */
-    private $definition;
+    private $definitions;
 
 
     /**
@@ -49,9 +49,19 @@ class App implements RequestHandlerInterface
     private $index = 0;
 
 
-    public function __construct($definition = null)
+    /**
+     * App constructor.
+     * @param string|array|null $definitions
+     */
+    public function __construct($definitions = [])
     {
-        $this->definition = $definition;
+        if (is_string($definitions)) {
+            $definitions = [$definitions];
+        }
+        if (!$this->isSequential($definitions)) {
+            $definitions = [$definitions];
+        }
+        $this->definitions = $definitions;
     }
 
 
@@ -136,8 +146,8 @@ class App implements RequestHandlerInterface
                 $builder->setDefinitionCache(new FilesystemCache('tmp/di'));
                 $builder->writeProxiesToFile(true, 'tmp/proxies');
             }
-            if ($this->definition) {
-                $builder->addDefinitions($this->definition);
+            foreach ($this->definitions as $definition) {
+                $builder->addDefinitions($definition);
             }
             foreach ($this->modules as $module) {
                 if ($module::DEFINITIONS) {
@@ -155,5 +165,20 @@ class App implements RequestHandlerInterface
     public function getModules(): array
     {
         return $this->modules;
+    }
+
+
+    /**
+     * Check if an array is sequential
+     *
+     * @param array $array
+     * @return bool
+     */
+    private function isSequential(array $array): bool
+    {
+        if (empty($array)) {
+            return true;
+        }
+        return array_keys($array) === range(0, count($array) - 1);
     }
 }

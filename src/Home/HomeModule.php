@@ -11,6 +11,6 @@ class HomeModule extends Module
     public function __construct(Router $router, RendererInterface $renderer)
     {
         $renderer->addPath('home', __DIR__);
-        $router->get('/home', HomeAction::class, 'home');
+        $router->get('/', HomeAction::class, 'home');
     }
 }
