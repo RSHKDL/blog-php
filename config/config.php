@@ -23,7 +23,7 @@ return [
     'database.host' => 'localhost',
     'database.username' => 'root',
     'database.password' => '',
-    'database.name' => 'demo_blog_v2',
+    'database.name' => 'demo_debug',
     'views.path' => dirname(__DIR__) . '/views',
     'twig.extensions' => [
         \DI\get(RouterTwigExtension::class),
@@ -51,8 +51,11 @@ return [
         );
     },
     // MAILER
-    'mail.to' => 'rshkdl86@gmail.com',
-    'username' => '',
-    'password' => '',
+    'mail.to' => 'your_email',
+    'mail.username' => 'your_username',
+    'mail.password' => 'your_password',
+    'mail.host' => 'your_host',
+    'mail.port' => 0, // use integer
+    'mail.security' => 'your_host_security', // ex: ssl
     Swift_Mailer::class => \DI\factory(\Framework\SwiftMailerFactory::class)
 ];

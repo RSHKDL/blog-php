@@ -53,5 +53,10 @@ return [
     },
     // MAILER
     'mail.to' => 'your_email',
+    'mail.username' => 'your_username',
+    'mail.password' => 'your_password',
+    'mail.host' => 'your_host',
+    'mail.port' => 0, // use integer
+    'mail.security' => 'your_host_security', // ex: ssl
     Swift_Mailer::class => \DI\factory(\Framework\SwiftMailerFactory::class)
 ];

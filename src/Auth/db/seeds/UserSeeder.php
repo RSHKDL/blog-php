@@ -18,8 +18,8 @@ class UserSeeder extends AbstractSeed
     {
         $this->table('users')
             ->insert([
-                'username' => 'Ereshkidal',
-                'email' => 'rshkdl86@gmail.com',
+                'username' => 'Admin',
+                'email' => 'admin@admin.com',
                 'password' => password_hash('admin', PASSWORD_DEFAULT)
             ])
             ->save();

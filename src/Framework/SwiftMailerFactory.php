@@ -7,14 +7,14 @@ class SwiftMailerFactory
 {
 
 
-    public function __invoke(ContainerInterface $container): \Swift_Mailer
+    public function __invoke(ContainerInterface $c): \Swift_Mailer
     {
-        if ($container->get('env') === 'production') {
+        if ($c->get('env') === 'production') {
             $transport =  new \Swift_SendmailTransport();
         } else {
-            $transport = new \Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl');
-            $transport->setUsername('');
-            $transport->setPassword('');
+            $transport = new \Swift_SmtpTransport($c->get('mail.host'), $c->get('mail.port'), $c->get('mail.security'));
+            $transport->setUsername($c->get('mail.username'));
+            $transport->setPassword($c->get('mail.password'));
         }
         return new \Swift_Mailer($transport);
     }

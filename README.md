@@ -16,15 +16,23 @@ Made with this differents courses:
 
 1. Clone the repository in `/path/to/your/blog`
 2. Install the dependencies with composer
-3. Define configuration constants in `/path/to/your/blog/config/config.php` then rename it config.php
+3. Define configuration constants in `/path/to/your/blog/config/config-dist.php` then rename it config.php
 4. Set up your database and fill it with data by using phinx in a dev environment (http://docs.phinx.org/en/latest/)
-    * Create the table with phinx migrate.
+    * Create your database with the same name you used in config.php
     
-            $ ENV=dev phinx migrate
+    * Create the tables with phinx migrate.
     
-    * Fill it with data with phinx seed:run.
+            $ ENV=dev vendor/bin/phinx migrate
     
-            $ ENV=dev phinx seed:run
+    * Fill it with data with phinx seed:run. (To avoid foreign keys check trouble, seed the user first, then the categories, then the posts)
+            
+            $ ENV=dev vendor/bin/phinx seed:run -s UserSeeder
+            
+            $ ENV=dev vendor/bin/phinx seed:run -s CategorySeeder
+            
+            $ ENV=dev vendor/bin/phinx seed:run -s PostSeeder
+            
+        Note that the seeds are optionnals but you'll need to add your own data.
 5. Start your local server using php in a dev environment
 
         ENV=dev php -S localhost:8000 -t /public

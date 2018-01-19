@@ -6,12 +6,12 @@ class User extends \App\Auth\User
 
 
     /*
-     * @var string
+     * @var string|null
      */
     private $firstname;
 
     /*
-     * @var string
+     * @var string|null
      */
     private $lastname;
 
@@ -22,33 +22,33 @@ class User extends \App\Auth\User
 
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFirstname(): string
+    public function getFirstname()
     {
         return $this->firstname;
     }
 
     /**
-     * @param string $firstname
+     * @param string|null $firstname
      */
-    public function setFirstname(string $firstname): void
+    public function setFirstname($firstname): void
     {
         $this->firstname = $firstname;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLastname(): string
+    public function getLastname()
     {
         return $this->lastname;
     }
 
     /**
-     * @param string $lastname
+     * @param string|null
      */
-    public function setLastname(string $lastname): void
+    public function setLastname($lastname): void
     {
         $this->lastname = $lastname;
     }
