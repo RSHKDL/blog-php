@@ -52,5 +52,7 @@ return [
     },
     // MAILER
     'mail.to' => 'rshkdl86@gmail.com',
+    'username' => '',
+    'password' => '',
     Swift_Mailer::class => \DI\factory(\Framework\SwiftMailerFactory::class)
 ];

@@ -8,8 +8,8 @@ class AddNameToUsers extends AbstractMigration
     public function change()
     {
         $this->table('users')
-            ->addColumn('firstname', 'string')
-            ->addColumn('lastname', 'string')
+            ->addColumn('firstname', 'string', ['null' => true])
+            ->addColumn('lastname', 'string', ['null' => true])
             ->update();
     }
 }
